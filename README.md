@@ -36,6 +36,18 @@ This will create the executable:
 packet_analyzer
 ```
 
+### 🏗 Run the unit tests
+
+```bash
+make test_parser
+```
+
+This will create the executable:
+
+```
+packet_analyzer
+```
+
 ---
 
 ## ▶️ Run the Program
@@ -52,7 +64,7 @@ sudo ./packet_analyzer -i <interface> [-f <filter>] [-t <seconds>]
 |------------|--------------------------------------------|
 | `-i`       | Network interface (e.g. `lo`, `eth0`) **[required]** |
 | `-f`       | Optional BPF filter (e.g. `"tcp port 80"`) |
-| `-t`       | Duration in seconds (e.g. `-t 30`)         |
+| `-t`       | Optional Duration in seconds (e.g. `-t 30`)         |
 
 ---
 
@@ -78,6 +90,28 @@ Statistics are printed every 5 seconds, and include:
 - Count and % of TCP, UDP, ICMP, Other
 - Memory usage in KB
 
+
+Packet Analyzer (E-VAS Tel Team)
+---------------------------------
+Interface: wlp3s0
+Buffer Size: 100 packets
+Filter: none
+Duration: 40 seconds
+Output File: none
+
+^C
+Received signal 2, shutting down...
+
+Final Statistics:
+[33 seconds elapsed]
+Packets captured: 2782
+TCP:   2359 (84.8%)
+UDP:   421 (15.1%)
+ICMP:  0 (0.0%)
+Other: 2 (0.1%)
+Memory usage: 28.8 KB
+
+Packet analyzer terminated.
 ---
 
 ## 🧼 Clean Up
@@ -101,4 +135,4 @@ make clean
 
 ---
 
-© 2024 E-VAS Tel Team – Junior Engineer Submission by Islam Shaaban
+© 2025 E-VAS Tel Team – Junior Engineer Submission by Islam Shaaban
