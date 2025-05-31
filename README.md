@@ -42,10 +42,12 @@ packet_analyzer
 make test_parser
 ```
 
-This will create the executable:
+This include:
 
 ```
-packet_analyzer
+- Basic protocol identification (TCP/UDP/ICMP)
+- Edge case handling (malformed packets)
+
 ```
 
 ---
@@ -93,10 +95,10 @@ Statistics are printed every 5 seconds, and include:
 
 Packet Analyzer (E-VAS Tel Team)
 ---------------------------------
-Interface: wlp3s0
+Interface: eth0
 Buffer Size: 100 packets
-Filter: none
-Duration: 40 seconds
+Filter: tcp
+Duration: 0
 Output File: none
 
 ^C
@@ -104,14 +106,12 @@ Received signal 2, shutting down...
 
 Final Statistics:
 [33 seconds elapsed]
-Packets captured: 2782
-TCP:   2359 (84.8%)
-UDP:   421 (15.1%)
-ICMP:  0 (0.0%)
-Other: 2 (0.1%)
-Memory usage: 28.8 KB
-
-Packet analyzer terminated.
+Packets captured: 142
+TCP: 98 (69.0%)
+UDP: 32 (22.5%)
+ICMP: 2 (1.4%)
+Other: 10 (7.0%)
+Memory usage: 2.8 MB
 ---
 
 ## 🧼 Clean Up
