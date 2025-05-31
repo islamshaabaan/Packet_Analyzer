@@ -79,7 +79,7 @@ sudo ./packet_analyzer -i lo -t 10
 
 Run on Ethernet with TCP filter:
 ```bash
-sudo ./packet_analyzer -i eth0 -f "tcp"
+sudo ./packet_analyzer -i eth0 -f "tcp" -t 40
 ```
 
 ---
@@ -93,25 +93,47 @@ Statistics are printed every 5 seconds, and include:
 - Memory usage in KB
 
 
-Packet Analyzer (E-VAS Tel Team)
----------------------------------
-Interface: eth0
-Buffer Size: 100 packets
-Filter: tcp
-Duration: 0
-Output File: none
+## 📊 Sample Output
 
+```
+Packet Analyzer (E-VAS TEL Team)
+================================
+Interface: eth0
+Buffer Size: 8192 packets
+Filter: tcp
+Duration: 40 seconds
+Output File: none
+```
+
+Every 5 seconds, the tool prints live statistics like:
+
+```
+Packets captured: 134
+TCP:   100 (74.6%)
+UDP:   30 (22.4%)
+ICMP:  3 (2.2%)
+Other: 1 (0.7%)
+Memory usage: 845.7 KB
+=======================
+```
+
+At the end of duration or press CTRL+C , a final summary is printed:
+
+```
 ^C
 Received signal 2, shutting down...
 
 Final Statistics:
-[33 seconds elapsed]
-Packets captured: 142
-TCP: 98 (69.0%)
-UDP: 32 (22.5%)
-ICMP: 2 (1.4%)
-Other: 10 (7.0%)
-Memory usage: 2.8 MB
+[42 seconds elapsed]
+Packets captured: 358
+TCP:   240 (67.0%)
+UDP:   90 (25.1%)
+ICMP:  21 (5.9%)
+Other: 7 (2.0%)
+Memory usage: 1124.0 KB
+
+Packet analyzer terminated.
+```
 ---
 
 ## 🧼 Clean Up
