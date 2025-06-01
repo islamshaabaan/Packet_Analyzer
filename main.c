@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
    if (!handle)
    {
       fprintf(stderr, "Couldn't open device interface %s: %s\n", config.interface, errbuf);
-
+      
       return EXIT_FAILURE;
    }
 
@@ -118,23 +118,47 @@ int main(int argc, char *argv[])
    printf("\n");
 
    time_t start_time = time(NULL);
-   while (!stop_capture)
+   
+   struct timespec next_print; // Stores the exact timestamp for the next statistics print
+   clock_gettime(1, &next_print); // Initialize first print time, CLOCK_MONOTONIC: Uses a steady clock (unaffected by system time changes)
+   
+   if(pcap_setnonblock(handle, 1, errbuf)== -1)
    {
-      // -1 or 100 ? -1 all avaible packets
-      if (pcap_dispatch(handle, -1, packet_handler, (unsigned char *)&stats) == -1)
+      fprintf(stderr, "Couldn't Set non blocking mode as: %s\n", errbuf);
+      pcap_close(handle);
+
+      return EXIT_FAILURE;
+   }
+   
+   while (!stop_capture)
+   {  
+      // Process packets (returns immediately if none)
+      if (pcap_dispatch(handle, 100, packet_handler, (unsigned char *)&stats) == -1)
       {
-         fprintf(stderr, "Capture error on %s: %s\n", config.interface, pcap_geterr(handle));
+         fprintf(stderr, "Capture Error: %s\n", pcap_geterr(handle));
          break;
       }
 
-      print_stats(&stats);
+      struct timespec now;
+      clock_gettime(1, &now);
 
+      if ((now.tv_sec - next_print.tv_sec) >= 5)
+      {
+         print_stats(&stats);
+
+         // Set next print time to exact 5-second intervals
+         next_print.tv_sec += 5;
+         next_print.tv_nsec = 0; // Reset nanoseconds to zero
+      }
+      
+      // Small sleep to prevent CPU overload
+      struct timespec sleep_time = {0, 1000000}; // 1ms
+      nanosleep(&sleep_time, NULL);
+      
       if (config.duration > 0 && (time(NULL) - start_time) >= config.duration)
       {
          break;
       }
-
-      sleep(5);
    }
 
    // Final statistics
