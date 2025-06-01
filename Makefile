@@ -2,7 +2,7 @@
 
 CC = gcc
 CFLAGS = -Wall -Wextra -O2
-LDFLAGS = -lpcap -lrt
+LDFLAGS = -lpcap -lrt -lpthread
 
 TARGET = packet_analyzer
 SRCS = main.c packet_parser.c

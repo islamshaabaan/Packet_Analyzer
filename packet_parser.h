@@ -16,6 +16,28 @@
 #include <stdatomic.h>
 #include <sys/resource.h> // For memory usage tracking
 
+/* Error codes */
+#define ERROR_RETURN -1
+#define OTHER_PROTOCOL_TYPE -1
+#define INVALID_PACKET -2
+
+/* Timing constants */
+#define SLEEP_INTERVAL_SEC 5
+#define PCAP_TIMEOUT_MS    1000
+
+/* Network protocol constants */
+#define MIN_IP_HEADER_LEN  5
+#define IP_VERSION_4 4
+#define ETHERNET_HEADER_LEN 14
+#define ETHERTYPE_IP 0x0800
+#define SNAP_LEN 1518  // Maximum bytes per packet, Safe for Ethernet with full headers
+
+/* Capture settings */
+#define ALL_AVAILABLE_PACKETS -1
+#define PROCESS_PACKETS_NUMBER 100
+#define PROMISC_MODE 1
+#define NOT_FILTER_OPTIMIZE 0
+
 /* Ethernet header 14 Bytes */
 struct eth_header
 {
@@ -37,7 +59,7 @@ typedef struct
 /* Function prototypes */
 
 /**
- * @brief Initialize statistics structure
+ * @brief Initialize statistics counters to zero
  * @param stats Pointer to statistics structure
  */
 void init_packet_stats(packet_stats_t *stats);
@@ -50,9 +72,9 @@ void init_packet_stats(packet_stats_t *stats);
 void process_packet(const unsigned char *packet, packet_stats_t *stats);
 
 /**
- * @brief Identify packet protocol type
- * @param packet Pointer to packet data
- * @return Protocol type (IPPROTO_TCP/IPPROTO_UDP/IPPROTO_ICMP) or -1 if not IP
+ * @brief Safely identify packet protocol type
+ * @param packet Pointer to packet data starting from Ethernet header
+ * @return Protocol type (IPPROTO_TCP/IPPROTO_UDP/IPPROTO_ICMP) or OTHER_PROTOCOL_TYPE  if not IP or invalid
  */
 int get_packet_protocol(const unsigned char *packet);
 
